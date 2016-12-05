@@ -2,7 +2,3 @@ language: r
 warnings_are_errors: false
 sudo: required
 cache: packages
-install:
-  - install.packages(ggplot2)
-script: 
-  - bash test.sh
