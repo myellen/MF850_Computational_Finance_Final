@@ -5,8 +5,8 @@
 loadpackages <- function(packagestoinstall) {
   packagestoinstall_split <- strsplit(packagestoinstall,", ")[[1]]
   for (packagename in packagestoinstall_split) {
-    if(!"devtools" %in% rownames(installed.packages())){
-      install.packages("devtools", dependencies = TRUE)
+    if(!packagename %in% rownames(installed.packages())){
+      install.packages(packagename, dependencies = TRUE)
     }
     else {
       print(paste(packagename,"already installed"))
