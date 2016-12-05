@@ -15,6 +15,8 @@ loadpackages <- function(packagestoinstall) {
   }
 }
 
+update.packages(ask = FALSE)
+
 requiredpackages <- "devtools, glmnet"
 loadpackages(requiredpackages)
 
