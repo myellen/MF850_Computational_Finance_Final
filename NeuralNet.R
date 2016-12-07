@@ -1,3 +1,10 @@
+#https://www.r-bloggers.com/fitting-a-neural-network-in-r-neuralnet-package/
+#http://www.kdnuggets.com/2016/08/begineers-guide-neural-networks-r.html
+#http://www.parallelr.com/r-deep-neural-network-from-scratch/
+#http://gekkoquant.com/2012/05/26/neural-networks-with-r-simple-example/
+
+#Install package 'neuralnet'
+
 library("neuralnet")
 
 #Going to create a neural network to perform sqare rooting
