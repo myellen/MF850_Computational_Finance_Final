@@ -1,3 +1,4 @@
+install.packages("boot")
 
 # Input the data
 data <- read.csv("mf850-finalproject-data.csv")
@@ -9,8 +10,8 @@ hist(RETMONTH, breaks =60)
 # Count how many returns are higher and lower 
 (re_up <- length(RETMONTH[RETMONTH<0]))
 (re_down <- length(RETMONTH[RETMONTH>0])) 
-# Up to down ratio 
-re_up/re_down
+# Percentage of increases - Baseline   
+re_up/(re_up+re_down)
 # Stop up down as new column vector 
 up_down <- ifelse(RETMONTH >0, 1, 0)
 
@@ -30,12 +31,17 @@ length(uniqueness[uniqueness<50])
 which(uniqueness <50)
 # Already saw Industry has levels 
 
-# Establish plotting points - Last 300 data points 
-n <- length(RETMONTH)
-n_low <- n-1000 
-
 # Plot last __ data points 
 plot(RETMONTH[n_low:n], type = 'l', col= 'red', lwd = 2)
+abline(h= mean(RETMONTH[n_low:n]), col = "blue", lwd = 2)
+# A priori MSE - squared error from the mean 
+MSE_i <- (RETMONTH[n_low:n]-mean(RETMONTH[n_low:n]))^2
+# MSE
+(MSE <- sum(MSE_i))
+
+# Establish plotting points - Last 1000 data points 
+n <- length(RETMONTH)
+n_low <- n-1000 
 
 
 # Take out industry, date, retmonth variables 
@@ -61,4 +67,20 @@ xs_df <- cbind(RETMONTH[n_low:n], as.data.frame(xs))
 pairs(xs_df)
 # not much there 
 
+# Get the data from the new data frame for the specified length 
+data2 <- data_no_ind[n_low:n,]
+# Combine categorical output with predictors 
+data3 <- cbind(up_down[n_low:n], data2)
+# Change data type to data frame -- preparations for logistic regression 
+data3 <- data.frame(data3)
+# Rename repsonse column in data frame  
+names(data3)[1] <- "updown"
+# Fit logistic regression 
+fit <- glm(updown~., data= data3, family = "binomial")
+# Find accuracy of logistic regression 
+library(boot) #cv.glm
+# In sample accuracy 
+cv_est <- cv.glm(data3, fit, K= 10)$delta[1]
+# In sample accuracy for logistic regression 
+1-cv_est
 
