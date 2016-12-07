@@ -3,36 +3,40 @@
 data <- read.csv("mf850-finalproject-data.csv")
 summary(data)
 # Seperate the response variable 
-REMONTH <- data$RETMONTH_SPX
+RETMONTH <- data$RETMONTH
 # Histogram for response 
-hist(REMONTH, breaks =60)
-# How many unique response variables 
-length(unique(REMONTH))
+hist(RETMONTH, breaks =60)
 # Count how many returns are higher and lower 
-(re_up <- length(REMONTH[REMONTH<0]))
-(re_down <- length(REMONTH[REMONTH>0])) 
+(re_up <- length(RETMONTH[RETMONTH<0]))
+(re_down <- length(RETMONTH[RETMONTH>0])) 
 # Up to down ratio 
 re_up/re_down
 # Stop up down as new column vector 
-up_down <- ifelse(REMONTH >0, 1, 0)
+up_down <- ifelse(RETMONTH >0, 1, 0)
 
-# Put plots above and below 
-par(mfrow = 2:1)
-# Plot the last 100 points 
-plot(REMONTH[(length(REMONTH)-109):length(REMONTH)], type = 'l')
-# Plot the first 100 points 
-plot(REMONTH[0:100], type = 'l')
 
-# Ontop of each other 
-par(mfrow = c(1,1))
-plot(REMONTH[(length(REMONTH)-109):length(REMONTH)], type = 'l', col= 'red', lwd = 3)
-lines(REMONTH[0:109], type = 'l', col= 'blue', lwd = 2)
+# Uniqueness 
+# Function to measure number of unique elements in column 
+numb_unique <- function(x) {
+  uniques <- length(unique(x))
+  return (uniques)
+}
 
-length(unique(REMONTH[(length(REMONTH)-100):length(REMONTH)]))
-acf(REMONTH)
+# Apply number of unique function to all columns of the data set 
+uniqueness <- apply(data,2,numb_unique)
+# Count how many columns have less than 50 unique values (indicating they are categorical)
+length(uniqueness[uniqueness<50])
+# Determine which variables should be categorical variables 
+which(uniqueness <50)
+# Already saw Industry has levels 
 
-# Look at first 50 points of high low response 
-plot(up_down[1:50], type = 'l')
+# Establish plotting points - Last 300 data points 
+n <- length(RETMONTH)
+n_low <- n-1000 
+
+# Plot last __ data points 
+plot(RETMONTH[n_low:n], type = 'l', col= 'red', lwd = 2)
+
 
 # Take out industry, date, retmonth variables 
 industry <- data$Industry
@@ -40,6 +44,7 @@ date <- data$Date
 data_no_ind <- data
 data_no_ind$Industry <- NULL
 data_no_ind$Date <- NULL
+data_no_ind$RETMONTH <- NULL
 # Scale data 
 data_no_ind <- scale(data_no_ind)
 
@@ -47,9 +52,13 @@ data_no_ind <- scale(data_no_ind)
 pca <- prcomp(data_no_ind, center = TRUE, scale = FALSE)
 summary(pca)
 plot(pca)
-# Maybe take the first 32 variables- they explain 94% of the variance and the increase becomes less than 1% after that 
+# Maybe take the first 31 variables- they explain 94% of the variance and the increase becomes less than 1% after that 
 # Will loose a lot of interpretability 
 
-
+# Save first 9 principal components, last __ data points  ~ 58% variance, decrease <2% 
+xs <- pca$x[n:n_low,1:9]
+xs_df <- cbind(RETMONTH[n_low:n], as.data.frame(xs))
+pairs(xs_df)
+# not much there 
 
 
