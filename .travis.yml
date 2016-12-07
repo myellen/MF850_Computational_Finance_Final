@@ -2,6 +2,15 @@ language: r
 warnings_are_errors: false
 sudo: required
 cache: packages
+notifications:
+  email:
+    recipients:
+      - max.yellen@gmail.com
+      - malctaylor15@gmail.com
+      - cassie.mckay8@gmail.com
+      - i.ghuneim93@live.com
+    on_success: change #[always|never|change]
+    on_failure: always #[always|never|change]
 before_install:
   - chmod a+x ./RunScript.sh
 install:
