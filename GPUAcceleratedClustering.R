@@ -1,4 +1,5 @@
 # GPU-Accelerated R in the Cloud with Teraproc Cluster-as-a-Service
+# Install package 'rpud'
 
 library("rpud")
 #
