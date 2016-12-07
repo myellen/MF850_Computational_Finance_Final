@@ -24,4 +24,6 @@ install:
 #  - Rscript -e 'update.packages(ask = FALSE)'
 script:
   - ./LintrScript.sh
-  - ./RunScript.sh
+  - ./RunScript.sh test.R
+  - ./RunScript.sh cm_v1.R
+  - ./RunScript.sh data_exploration-12-5.R
