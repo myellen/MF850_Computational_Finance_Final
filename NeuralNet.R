@@ -3,7 +3,7 @@
 #http://www.parallelr.com/r-deep-neural-network-from-scratch/
 #http://gekkoquant.com/2012/05/26/neural-networks-with-r-simple-example/
 
-#Install package 'neuralnet'
+install.packages('neuralnet')
 
 library("neuralnet")
 

@@ -1,7 +1,7 @@
 # GPU-Accelerated R in the Cloud with Teraproc Cluster-as-a-Service
 # https://devblogs.nvidia.com/parallelforall/gpu-accelerated-r-cloud-teraproc-cluster-service/
 # http://www.r-tutor.com/gpu-computing/clustering/distance-matrix
-# Install package 'rpud'
+install.packages('rpud')
 
 library("rpud")
 #
