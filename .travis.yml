@@ -11,8 +11,11 @@ notifications:
 #      - i.ghuneim93@live.com
     on_success: change #[always|never|change]
     on_failure: always #[always|never|change]
+r_github_packages:
+  - jimhester/lintr
 before_install:
   - chmod a+x ./RunScript.sh
+  - chmod a+x ./LintrScript.sh
 install:
   - echo 'options(repos = "http://cran.rstudio.com")' > .Rprofile
   - echo '.travis.yml' > .Rbuildignore
@@ -20,4 +23,5 @@ install:
 #  - Rscript -e 'if(!"covr" %in% rownames(installed.packages())) { install.packages("covr", dependencies = TRUE) }'
 #  - Rscript -e 'update.packages(ask = FALSE)'
 script:
+  - ./LintrScript.sh
   - ./RunScript.sh
