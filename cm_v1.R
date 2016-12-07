@@ -1,5 +1,5 @@
 ## Load the data
-mydata<-read.csv(file="/Users/leighm888/Desktop/mf850-finalproject-data.csv", header=TRUE, sep=",")
+mydata<-read.csv(file="mf850-finalproject-data.csv", header=TRUE, sep=",")
 
 #turns categorical variables in factors
 require(rpart)	
