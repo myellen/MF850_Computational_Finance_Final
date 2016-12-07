@@ -6,9 +6,9 @@ notifications:
   email:
     recipients:
       - max.yellen@gmail.com
-#      - malctaylor15@gmail.com
-#      - cassie.mckay8@gmail.com
-#      - i.ghuneim93@live.com
+      - malctaylor15@gmail.com
+      - cassie.mckay8@gmail.com
+      - i.ghuneim93@live.com
     on_success: change #[always|never|change]
     on_failure: always #[always|never|change]
 r_github_packages:
