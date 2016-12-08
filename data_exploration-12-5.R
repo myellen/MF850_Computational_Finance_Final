@@ -31,6 +31,10 @@ length(uniqueness[uniqueness<50])
 which(uniqueness <50)
 # Already saw Industry has levels 
 
+# Establish plotting points - Last 1000 data points 
+n <- length(RETMONTH)
+n_low <- n-1000 
+
 # Plot last __ data points 
 plot(RETMONTH[n_low:n], type = 'l', col= 'red', lwd = 2)
 abline(h= mean(RETMONTH[n_low:n]), col = "blue", lwd = 2)
@@ -38,10 +42,6 @@ abline(h= mean(RETMONTH[n_low:n]), col = "blue", lwd = 2)
 MSE_i <- (RETMONTH[n_low:n]-mean(RETMONTH[n_low:n]))^2
 # MSE
 (MSE <- sum(MSE_i))
-
-# Establish plotting points - Last 1000 data points 
-n <- length(RETMONTH)
-n_low <- n-1000 
 
 
 # Take out industry, date, retmonth variables 
