@@ -43,43 +43,30 @@ MSE_train <- mean((y_train - mean(y_train))^2)
 MSE_test <- mean((y_test - mean(y_test))^2)
 
 
-# Train set for categorical analysis 
-y_train_cat <- ifelse(y_train >0, 1, 0)
-# Ratio of high vs low returns for TRAIN set 
-(high_low_ratio <- sum(y_train_cat == 1)/length(y_train_cat))
 
-# Test set for categorical analysis 
-y_test_cat <- ifelse(y_test >0, 1, 0)
-# Ratio of high vs low returns for TEST set 
-(high_low_ratio <- sum(y_test_cat == 1)/length(y_test_cat))
-# A priori number to beat 
+############################################
+## Start Random Forest Stuff
+############################################
+install.packages("randomForest")
+library(randomForest)
+# Fit random forest with 1000 trees, test on test data 
+fit_rf2 <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 1000)
 
 
+names(fit_rf2)
+# Calculate in sample MSE 
+(MSE_train_rf <- mean((fit_rf2$predicted - y_train)^2))
+# Compared to baseline in sample MSE
+MSE_train
+# Percentage increase 
+((abs(MSE_train_rf - MSE_train))/MSE_train)*100
 
-# Fun Comparision/ Sampling stuff - want to make sure we have a representative sample
-# Plot histogram of full, test and training for response
-par(mfrow=c(1,3))
-hist(y, breaks = 40)
-hist(y_train, breaks = 40)
-hist(y_test, breaks = 40)
-# Notice that full has more extreme values and slightly more extreme
+# Out of sample MSE 
+(MSE_rf <- mean((fit_rf2$test$predicted - y_test)^2))
+# Compared to baseline 
+MSE_test
 
-# Look at means for the samples 
-c(mean(y), mean(y_train), mean(y_test))
-
-par(mfrow= c(1,1))
-# 
-qqplot(y, y_train)
-qqline(y_train)
-ks.test(y_train, y)
-#
-qqplot(y,y_test)
-qqline(y_test)
-ks.test(y_test, y)
-# 
-qqplot(y_test, y_train)
-qqline(y_test)
-ks.test(y_test, y_train)
-
+# Very small gain percentage gain over regular 
+(abs(MSE_rf - MSE_test)/MSE_test)*100
 
 

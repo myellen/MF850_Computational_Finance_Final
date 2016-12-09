@@ -1,5 +1,4 @@
-# Template for importing data into train and test sets 
-# Also need to remove some variables 
+# Try using recurrent nueral networks
 
 # Import data
 data <- read.csv("mf850-finalproject-data.csv")
@@ -9,7 +8,7 @@ y <- data$RETMONTH
 
 # Determine test and train size 
 test_size <- 300 
-train_size <- 2000 
+train_size <- 10000 
 
 # Store  test and train response variable 
 
@@ -26,6 +25,7 @@ y_test <- y[test_low:test_high]
 y_train <- y[train_low:train_high]
 
 # Remove Date, Industry, Returns (response variables)
+Date <- data$Date[test_low:test_high]
 data$Date <- NULL
 data$Industry <- NULL 
 data$RETMONTH <- NULL 
@@ -34,14 +34,6 @@ data$RETMONTH <- NULL
 data <- scale(data)
 x_test <- data[test_low:test_high,]
 x_train <- data[train_low:train_high, ]
-
-# Some benchmarks for regression and categorical analysis 
-
-# Baseline MSE from guessing the mean for in sample accuracy 
-MSE_train <- mean((y_train - mean(y_train))^2)
-# Baseline MSE from guessing the mean for test (out of sample) accuracy  
-MSE_test <- mean((y_test - mean(y_test))^2)
-
 
 # Train set for categorical analysis 
 y_train_cat <- ifelse(y_train >0, 1, 0)
@@ -55,31 +47,33 @@ y_test_cat <- ifelse(y_test >0, 1, 0)
 # A priori number to beat 
 
 
+##########################
+## RNN Practice 
+##########################
 
-# Fun Comparision/ Sampling stuff - want to make sure we have a representative sample
-# Plot histogram of full, test and training for response
-par(mfrow=c(1,3))
-hist(y, breaks = 40)
-hist(y_train, breaks = 40)
-hist(y_test, breaks = 40)
-# Notice that full has more extreme values and slightly more extreme
+install.packages("rnn")
+library(rnn)
 
-# Look at means for the samples 
-c(mean(y), mean(y_train), mean(y_test))
+max((x_train))
 
-par(mfrow= c(1,1))
-# 
-qqplot(y, y_train)
-qqline(y_train)
-ks.test(y_train, y)
-#
-qqplot(y,y_test)
-qqline(y_test)
-ks.test(y_test, y)
-# 
-qqplot(y_test, y_train)
-qqline(y_test)
-ks.test(y_test, y_train)
+x_train_arr <- array(x_train, dim = c(dim(x_train),ncol(x_train) ))
+y_train_arr <- array(y_train, dim = c(length(y_train),ncol(x_train),1))
 
+# Train RNN 
+rnn1 <- trainr(Y = y_train_arr[,dim(y_train_arr)[2]:1,,drop = F], 
+               X = x_train_arr[,dim(x_train_arr)[2]:1,,drop = F], 
+               learningrate = 0.1, 
+               hidden_dim = 20, 
+               batch_size = 100, 
+               numepochs = 7)
 
+# In sample accuracy 
+# Use RNN to predict against the training data 
+rnn_predictions <- predictr(rnn1, 
+                            x_train_arr[,dim(x_train_arr)[2]:1,,drop = F])
+# Reverse transform 
+rnn_predictions1 <- rnn_predictions[,dim(rnn_predictions)[2]:1]
 
+dim(rnn_predictions1) 
+
+# Test RNN 

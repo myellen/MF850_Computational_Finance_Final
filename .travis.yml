@@ -24,3 +24,4 @@ script:
 #  - ./RunScript.sh cm_v1.R
 #  - ./RunScript.sh GPUAcceleratedClustering.R
 #  - ./RunScript.sh NeuralNet.R
+  - ./RunScript.sh test_train_split.R
