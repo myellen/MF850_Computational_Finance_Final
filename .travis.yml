@@ -1,7 +1,7 @@
 language: r
 r:
   - oldrel
-  - release
+#  - release
 #  - devel
 warnings_are_errors: false
 sudo: required
