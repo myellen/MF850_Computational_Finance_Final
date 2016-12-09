@@ -15,8 +15,7 @@ re_up/(re_up+re_down)
 # Stop up down as new column vector 
 up_down <- ifelse(RETMONTH >0, 1, 0)
 
-
-# Uniqueness 
+# Determine how many unique predictors there are  
 # Function to measure number of unique elements in column 
 numb_unique <- function(x) {
   uniques <- length(unique(x))
@@ -31,18 +30,17 @@ length(uniqueness[uniqueness<50])
 which(uniqueness <50)
 # Already saw Industry has levels 
 
+# Establish plotting points - Last 1000 data points 
+n <- length(RETMONTH)
+n_low <- n-1000 
+
 # Plot last __ data points 
 plot(RETMONTH[n_low:n], type = 'l', col= 'red', lwd = 2)
 abline(h= mean(RETMONTH[n_low:n]), col = "blue", lwd = 2)
 # A priori MSE - squared error from the mean 
 MSE_i <- (RETMONTH[n_low:n]-mean(RETMONTH[n_low:n]))^2
 # MSE
-(MSE <- sum(MSE_i))
-
-# Establish plotting points - Last 1000 data points 
-n <- length(RETMONTH)
-n_low <- n-1000 
-
+(MSE <- mean(MSE_i))
 
 # Take out industry, date, retmonth variables 
 industry <- data$Industry
@@ -64,7 +62,7 @@ plot(pca)
 # Save first 9 principal components, last __ data points  ~ 58% variance, decrease <2% 
 xs <- pca$x[n:n_low,1:9]
 xs_df <- cbind(RETMONTH[n_low:n], as.data.frame(xs))
-pairs(xs_df)
+# pairs(xs_df)
 # not much there 
 
 # Get the data from the new data frame for the specified length 
