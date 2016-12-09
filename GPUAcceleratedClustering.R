@@ -1,9 +1,9 @@
 # GPU-Accelerated R in the Cloud with Teraproc Cluster-as-a-Service
 # https://devblogs.nvidia.com/parallelforall/gpu-accelerated-r-cloud-teraproc-cluster-service/
 # http://www.r-tutor.com/gpu-computing/clustering/distance-matrix
-install.packages('rpud')
+install.packages('rpud_0.6.1_src.zip')
 
-library("rpud")
+library(rpud)
 #
 # function to populate a data matrix
 #
