@@ -55,7 +55,7 @@ y_test_cat <- as.factor(ifelse(y_test > 0, 1, 0))
 install.packages("randomForest")
 library(randomForest)
 # Fit random forest with 1000 trees, test on test data 
-fit_rf1 <- randomForest(x_train, y_train_cat, xtest = x_test, ytest = y_test_cat, ntree = 1000)
+fit_rf1 <- randomForest(x_train, y_train_cat, xtest = x_test, ytest = y_test_cat, ntree = 2000)
 
 # In sample confusion matrix 
 (rf_confusion_train <- fit_rf1$confusion)
