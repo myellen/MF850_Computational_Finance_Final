@@ -25,6 +25,6 @@ script:
 #  - ./RunScript.sh GPUAcceleratedClustering.R
 #  - ./RunScript.sh NeuralNet.R
   - ./RunScript.sh test_train_split.R
-  - ./RunScript.sh random_forest_att_1.R
-  - ./RunScript.sh random_forest_att_1_reg.R
+  - ./RunScript.sh random_forest_cat.R
+  - ./RunScript.sh random_forest_reg.R
   - ./RunScript.sh lda_cat1.R
