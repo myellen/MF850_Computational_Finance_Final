@@ -40,6 +40,7 @@ x_train <- data[train_low:train_high, ]
 MSE_train <- mean( (y_train - mean(y_train)) ^ 2)
 # Baseline MSE from guessing the mean for test (out of sample) accuracy  
 MSE_test <- mean( (y_test - mean(y_test)) ^ 2)
+MSE_test1 <- mean((y_test - mean(y_train)) ^ 2)
 
 
 # Train set for categorical analysis 
