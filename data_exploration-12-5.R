@@ -1,17 +1,25 @@
+
+
 install.packages("boot")
 
 # Input the data
-data <- read.csv("mf850-finalproject-data.csv")
-summary(data)
-# Seperate the response variable
-RETMONTH <- data$RETMONTH
+source("test_train_split_by_date.R")
+
+# Response variable for test and train 
+y_train <- train_set$RETMONTH
+y_test <- test_set$RETMONTH
+
 # Histogram for response
-hist(RETMONTH, breaks = 60)
-# Count how many returns are higher and lower
-(re_up <- length(RETMONTH[RETMONTH < 0]))
-(re_down <- length(RETMONTH[RETMONTH > 0]))
+hist(y_train, breaks = 60, col = rgb(1, 0, 0, 0.5), probability = T, 
+     main = "Test/ Train return distribution")
+hist(y_test, breaks = 60, col = rgb(0, 0, 1, 0.5), probability = T, add = T)
+legend("topleft",c("Train Set", "Test Set"), 
+       col = c(rgb(1, 0, 0, 0.5), rgb(0, 0, 1, 0.5)),
+       lwd = 4)
+
 # Percentage of increases - Baseline
-re_up / (re_up + re_down)
+
+
 # Stop up down as new column vector 
 up_down <- ifelse(RETMONTH > 0, 1, 0)
 
@@ -25,9 +33,9 @@ numb_unique <- function(x) {
 # Apply number of unique function to all columns of the data set 
 uniqueness <- apply(data, 2, numb_unique)
 # Count how many columns have less than 50 unique values (indicating they are categorical)
-length(uniqueness[uniqueness < 50])
+length(uniqueness[uniqueness < 3431])
 # Determine which variables should be categorical variables
-which(uniqueness < 50)
+which(uniqueness < 3431)
 # Already saw Industry has levels
 
 # Establish plotting points - Last 1000 data points 

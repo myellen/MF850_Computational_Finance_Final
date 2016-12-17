@@ -3,6 +3,7 @@
 
 # Import data
 data <- read.csv("mf850-finalproject-data.csv")
+
 y <- data$RETMONTH
 # Peak at data again 
 

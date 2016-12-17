@@ -1,36 +1,15 @@
-# Template for importing data into train and test sets 
-# Also need to remove some variables 
 
-# Import data
-data <- read.csv("mf850-finalproject-data.csv")
-y <- data$RETMONTH
-# Peak at data again
 
-# Determine test and train size
-test_size <- 3000
-train_size <- 5000
-
-# Store  test and train response variable
-
-# Test set is last test_size
-# Training set is next train_size after test_size
-
-test_high <- nrow(data)
-test_low <- test_high - test_size # Lower row number for test set
-train_high <- test_low - 1 # Upper row number for training set
-train_low <- train_high - train_size # Lower row number for training set
+# Import the splits done previously 
+source("test_train_split_by_date.R")
 
 # Subset the Response variable into test and training sets
-y_test <- y[test_low:test_high]
-y_train <- y[train_low:train_high]
-
-# Remove Date, Industry, Returns (response variables)
-data$Date <- NULL
-# data$Industry <- NULL
-data$RETMONTH <- NULL
+y_test <- test_set$RETMONTH
+y_train <- train_set$RETMONTH
 
 # SCALE DATA
-data <- scale(data)
+
+
 # Create training set 
 x_test <- data[test_low:test_high, ]
 x_train <- data[train_low:train_high, ]
