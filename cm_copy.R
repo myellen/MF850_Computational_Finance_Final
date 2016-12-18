@@ -1,7 +1,7 @@
 library(glmnet)
 
 ##Read Test Data
-mytestdata<-read.csv(file="/Users/leighm888/Desktop/Test_set_v2.csv", header=TRUE, sep=",")
+mytestdata<-read.csv(file="Test_set_v2.csv", header=TRUE, sep=",")
 #turn categorical variables into factors
 date<-mytestdata[,1]
 RETMONTH_SPX<-mytestdata[,2]
