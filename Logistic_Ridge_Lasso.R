@@ -3,28 +3,6 @@
 # Import the splits done previously 
 source("test_train_split_by_date.R")
 
-# Subset the Response variable into test and training sets
-y_test <- test_set$RETMONTH
-y_train <- train_set$RETMONTH
-
-# SCALE DATA
-
-
-# Create training set 
-x_test <- data[test_low:test_high, ]
-x_train <- data[train_low:train_high, ]
-
-
-# Train set for categorical analysis 
-y_train_cat <- ifelse(y_train > 0, 1, 0)
-# Ratio of high vs low returns for TRAIN set 
-(high_low_ratio <- sum(y_train_cat == 1)  / length(y_train_cat))
-
-# Test set for categorical analysis 
-y_test_cat <- ifelse(y_test > 0, 1, 0)
-# Ratio of high vs low returns for TEST set 
-(high_low_ratio <- sum(y_test_cat == 1) / length(y_test_cat))
-# A priori number to beat 
 
 ###########################
 #### LASSO ANALYSIS 
@@ -34,13 +12,17 @@ y_test_cat <- ifelse(y_test > 0, 1, 0)
 data_train = data.frame(cbind(y_train_cat, x_train))
 # Lasso for all variable lasso  
 fit_all <- glm(y_train_cat~., data = data_train, family = "binomial")
+summary(fit_all)
 # Find accuracy of logistic regression 
 # install.packages("boot")
-library(boot) #cv.glm
+# library(boot) #cv.glm
 # In sample accuracy 
-cv_err <- cv.glm(data_train, fit_all, K = 10)$delta[1]
+# cv_err <- cv.glm(data_train, fit_all, K = 10)$delta[1]
 # In sample accuracy for logistic regression 
-1 - cv_err
+# 1 - cv_err
+# Out sample accuracy 
+predictions <- predict(fit_all, newdata = x_test, type = "response")
+hist(predictions)
 
 
 # Try using lasso and ridge  
@@ -49,7 +31,7 @@ library(glmnet)
 # Prepare data for glmnet package 
 x = model.matrix(y_train_cat~., data = data_train)
 # Specify lambdas we would like look through during ridge and lasso regressions 
-lambdas <- 10^seq(-6, 4, length = 200)
+lambdas <- 10^seq(-4, 2, length = 75)
 # Lasso Regression 
 cv.lasso = cv.glmnet(x, y_train_cat, family = "binomial", type.measure = "class", 
                      lambda = lambdas, alpha = 1, standardize = FALSE)
