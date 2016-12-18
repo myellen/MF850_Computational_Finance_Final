@@ -1,3 +1,5 @@
+
+
 source("test_train_split_by_date.R")
 ############################################
 ## Start Random Forest Stuff
@@ -5,13 +7,12 @@ source("test_train_split_by_date.R")
 install.packages("randomForest")
 library(randomForest)
 
+# Data prep for random forest - cannot handle large categorical variables 
 x_test$Industry <- NULL
 x_train$Industry <- NULL
 # Fit random forest with 1000 trees, test on test data 
-fit_rf2 <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 1000)
+fit_rf2 <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 500)
 
-
-names(fit_rf2)
 # Calculate in sample MSE
 (MSE_train_rf <- mean((fit_rf2$predicted - y_train) ^ 2))
 # Compared to baseline in sample MSE

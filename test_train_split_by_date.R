@@ -27,6 +27,12 @@ train_set$compid <- NULL
 # Remove Date 
 test_set$Date <- NULL
 train_set$Date <- NULL
+# Remove RETMONTH
+test_set$RETMONTH <- NULL
+train_set$RETMONTH <- NULL
+# Remove SPX - unique per month 
+test_set$RETMONTH_SPX <- NULL
+train_set$RETMONTH_SPX <- NULL
 
 # SCALE DATA
 # Need to separate categorical variables 
@@ -49,10 +55,6 @@ x_test <- as.data.frame(test_set)
 x_train$Industry <- Industry_train
 x_test$Industry <- Industry_test
 
-# Naming work around to keep variable names consistent 
-Industry_train <- Industry_test
-x_test <- cbind(test_set, Industry_train)
-
 # Train set for categorical analysis 
 y_train_cat <- ifelse(y_train > 0, 1, 0)
 # Ratio of high vs low returns for TRAIN set 
@@ -64,9 +66,13 @@ y_test_cat <- ifelse(y_test > 0, 1, 0)
 (high_low_ratio_test <- sum(y_test_cat == 1) / length(y_test_cat))
 # A priori number to beat 
 
+# Baseline MSE for training set- pick the mean 
+MSE_train <- mean((y_train - mean(y_train)) ^ 2)
+MSE_test <- mean((y_test - mean(y_test)) ^ 2)
+
 # Test and training sets to csv 
-# write.csv(test_set, file = "Test_set.csv")
-# write.csv(train_set, file = "Train_set.csv")
+write.csv(test_set, file = "Test_set.csv")
+write.csv(train_set, file = "Train_set.csv")
 
 # Remove variables we will not need 
 rm(data, train_set1, train_set2, pre_scale_test, 
