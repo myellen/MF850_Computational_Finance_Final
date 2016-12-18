@@ -16,7 +16,7 @@ y_train_cat <- as.factor(y_train_cat)
 x_train$Industry <- NULL
 x_test$Industry <- NULL
 
-# Number of number of trees 
+# Number of of trees 
 numb_tree <- 10
 # Pre allocate space for random forest 
 rf_tree_err <- data.frame(matrix(0, ncol = 3, nrow = numb_tree))

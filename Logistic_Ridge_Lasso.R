@@ -14,15 +14,14 @@ data_train = data.frame(cbind(y_train_cat, x_train))
 fit_all <- glm(y_train_cat~., data = data_train, family = "binomial")
 summary(fit_all)
 # Find accuracy of logistic regression 
-# install.packages("boot")
-# library(boot) #cv.glm
-# In sample accuracy 
-# cv_err <- cv.glm(data_train, fit_all, K = 10)$delta[1]
-# In sample accuracy for logistic regression 
-# 1 - cv_err
+
 # Out sample accuracy 
 predictions <- predict(fit_all, newdata = x_test, type = "response")
-hist(predictions)
+# If variable is small- change to be 
+predictions <- ifelse(predictions > 0.5, 1, 0)
+(accuracy_log_full <- mean(predictions == y_test_cat))
+# Compare to baseline 
+((accuracy_log_full - high_low_ratio_test)/high_low_ratio_test)*100
 
 
 # Try using lasso and ridge  
