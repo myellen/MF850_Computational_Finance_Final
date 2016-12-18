@@ -1,3 +1,15 @@
+laggedDataFile <- "laggeddata.rds"
+
+mf850_finalproject_data <- function() {
+  df <- read.csv("mf850-finalproject-data.csv")
+  return(df)
+}
+
+loadLaggedDataSet <- function() {
+  mynewdataframe <- readRDS(file = laggedDataFile)
+  return(mynewdataframe)
+}
+
 loadpackages <- function(packagestoinstall) {
   packagestoinstall_split <- strsplit(packagestoinstall,", ")[[1]]
   for (packagename in packagestoinstall_split) {
@@ -13,9 +25,8 @@ loadpackages <- function(packagestoinstall) {
 
 #update.packages(ask = FALSE)
 
-requiredpackages <- "devtools"
-loadpackages(requiredpackages)
-
+requiredpackages <- "devtools, h2o"
+#loadpackages(requiredpackages)
 
 lagStockData <- function(stockdata) {
   companies <- split(stockdata, factor(stockdata$compid))
@@ -32,17 +43,12 @@ lagStockData <- function(stockdata) {
     newdataset = rbind(newdataset, company)
     i <- i + 1
 #    companylist[[i]] <- company
-    if(i %% 1000 == 0) print(i)
+    if(i %% 500 == 0) print(i)
   }
-  return(newdataset)
 #  companymatrix <- rbind(companylist)
 #  return(companymatrix)
 #  newdataset <- as.data.frame(as.table(companymatrix))
+  saveRDS(newdataset, file = laggedDataFile)
+  return(newdataset)
 }
 
-stockdata <- read.csv("mf850-finalproject-data.csv")
-
-laggedDataSet <- lagStockData(stockdata)
-
-saveRDS(laggedDataSet, file = "laggeddata.rds")
-mynewdataframe <- readRDS(file = "laggeddata.rds")
