@@ -1,7 +1,3 @@
-#install.packages("devtools")
-#library(devtools)
-#devtools::use_travis()
-
 loadpackages <- function(packagestoinstall) {
   packagestoinstall_split <- strsplit(packagestoinstall,", ")[[1]]
   for (packagename in packagestoinstall_split) {
@@ -15,15 +11,35 @@ loadpackages <- function(packagestoinstall) {
   }
 }
 
-update.packages(ask = FALSE)
+#update.packages(ask = FALSE)
 
-requiredpackages <- "devtools, glmnet"
+requiredpackages <- "devtools"
 loadpackages(requiredpackages)
 
 
-f1 <- function(x, y) {
-  x+y
+lagStockData <- function(stockdata) {
+  companies <- split(stockdata, factor(stockdata$compid))
+#  companylist <- vector("list", NROW(companies))
+  newdataset <- data.frame()
+  i <- 0
+  for(company in companies)
+  {
+    returns <- company$RETMONTH
+    futurereturns <- c(returns[2:length(returns)],NA)
+    if (1 == NROW(returns)) {futurereturns <- c(NA)}
+    
+    company$futurereturns <- futurereturns
+    newdataset = rbind(newdataset, company)
+    i <- i + 1
+#    companylist[[i]] <- company
+    if(i %% 1000 == 0) print(i)
+  }
+  return(newdataset)
+#  companymatrix <- rbind(companylist)
+#  return(companymatrix)
+#  newdataset <- as.data.frame(as.table(companymatrix))
 }
-f1(1,2)
 
-data <- read.csv("mf850-finalproject-data.csv")
+stockdata <- read.csv("mf850-finalproject-data.csv")
+
+laggedDataSet <- lagStockData(stockdata)
