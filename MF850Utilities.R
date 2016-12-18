@@ -3,7 +3,12 @@ laggedDataFile <- "laggeddata.rds"
 LinearRegrssionFile <- "Linear_Ridge_Lasso.R"
 RandomForestRegressionFile <- "random_forest_reg.R"
 LogisticRegressionFile <- "Logistic_Ridge_Lasso.R"
-RandomForestCatFile <- "random_forest_cat.R"  # Random forest high/low 
+RandomForestCatFile <- "random_forest_cat.R"  # Random forest high/low
+
+LinearRegrssionModelFile <- "Linear_Ridge_Lasso_model.rds"
+RandomForestRegressionModelFile <- "random_forest_model.rds"
+LogisticRegressionModelFile <- "Logistic_Ridge_Lasso_model.rds"
+RandomForestCatModelFile <- "random_forest_cat_model.rds"  # Random forest high/low 
 
 mf850_finalproject_data <- function() {
   df <- read.csv("mf850-finalproject-data.csv")
