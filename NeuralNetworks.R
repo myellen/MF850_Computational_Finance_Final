@@ -2,65 +2,87 @@
 
 # Import data
 data <- read.csv("mf850-finalproject-data.csv")
-data <- scale(data)
-# Peak at data again 
-
-# Determine test and train size 
-test_size <- 3430
-train_size <- 6772
-
-# Store  test and train response variable 
-# Test set is last test_size
-# Training set is next train_size after test_size 
-
-# Observatoins per month 
-summary(data$Date)
 # Not equal number of observations per month 
 
 # Create test set - the last month of observations 
 test_set <- data[data$Date == "2015-12-31", ]
+
+y_test <- test_set$RETMONTH
 
 # Create train set - previous 2 months
 # First take one month 
 train_set1 <- data[data$Date == "2015-11-30", ]
 train_set2 <- data[data$Date == "2015-10-31", ]
 
-# Combine two month 
+# Combine two months for training set  
 train_set <- rbind(train_set1, train_set2)
+y_train <- train_set$RETMONTH
+
+# Remove company id - (there should only be one per month)
+test_set$compid <- NULL
+train_set$compid <- NULL
+# Remove Date 
+test_set$Date <- NULL
+train_set$Date <- NULL
+
+# SCALE DATA
+# Need to separate categorical variables 
+Industry_test <- (test_set$Industry)
+Industry_train <- (train_set$Industry)
+
+# Remove Industry from sets before we scale 
+pre_scale_test <- within(test_set, rm("Industry"))
+pre_scale_train <- within(train_set, rm("Industry"))
+
+# Scale the continous variable
+test_set <- scale(pre_scale_test)
+train_set <- scale(pre_scale_train)
+
+#Create data frames
+x_train <- as.data.frame(train_set)
+x_test <- as.data.frame(test_set)
+
+# Add industry to sets 
+x_train$Industry <- Industry_train
+x_test$Industry <- Industry_test
+
+# Train set for categorical analysis 
+y_train_cat <- ifelse(y_train > 0, 1, 0)
+# Ratio of high vs low returns for TRAIN set 
+(high_low_ratio_train <- sum(y_train_cat == 1)  / length(y_train_cat))
+
+# Test set for categorical analysis 
+y_test_cat <- ifelse(y_test > 0, 1, 0)
+# Ratio of high vs low returns for TEST set 
+(high_low_ratio_test <- sum(y_test_cat == 1) / length(y_test_cat))
+# A priori number to beat 
 
 # Test and training sets to csv 
-write.csv(test_set, file = "Test_set.csv")
-write.csv(train_set, file = "Train_set.csv")
+#write.csv(test_set, file = "Test_set.csv")
+#write.csv(train_set, file = "Train_set.csv")
 
-train_data <- read.csv("Train_set.csv")
-test_data <- read.csv("Test_set.csv")
+# Remove variables we will not need 
+rm(data, train_set1, train_set2, pre_scale_test, 
+   pre_scale_train, Industry_train, Industry_test,
+   train_set, test_set)
 
-# Remove Date, Company ID, Returns (response variables)
-train_data[,1] <- NULL
-train_data$Date <- NULL
-train_data$RETMONTH <- NULL
-train_data$compid <- NULL
-
-test_data[,1] <- NULL
-test_data$Date <- NULL
-test_data$RETMONTH <- NULL
-test_data$compid <- NULL
 
 # Some benchmarks for regression and categorical analysis 
 
 # Baseline MSE from guessing the mean for in sample accuracy 
-MSE_train <- mean( (y_train - mean(y_train)) ^ 2)
+MSE_train <- mean( (y_train_cat - mean(y_train_cat)) ^ 2)
 # Baseline MSE from guessing the mean for test (out of sample) accuracy  
-MSE_test <- mean((y_test - mean(y_train)) ^ 2)
+MSE_test <- mean((y_test_cat - mean(y_train_cat)) ^ 2)
 
 
-########################
-### Neural Network part 
-#######################
+###########################
+### Neural Network part ###
+###########################
 
 # Install packages 
 #install.packages("neuralnet")
 library(neuralnet)
+
 
 # Format data for neuralnet command 
 train_data <- cbind(x_train, y_train)
@@ -68,7 +90,6 @@ test_data <- cbind(x_test, y_test)
 
 # Create formula manually (bug in neural net package )
 f <- as.formula(c("y_train ~", (paste(colnames(x_train), collapse = " + "))))
-f
 
 
 # Train neural net
@@ -96,7 +117,7 @@ nnet_test_response <- compute(nnet1, x_test)$net.result
 MSE_test
 
 
-# parameter tuning - numberof hidden layers for neural network 
+# parameter tuning - number of hidden layers for neural network 
 
 # hidden layers to try from 3 - 51 by 3  
 hidden_layers <- seq(from = 3, to = 51, by= 3)
@@ -124,4 +145,4 @@ for (hl in hidden_layers){
   # Out sample MSE 
   nnet_hidden_layer_df$MSE_out[df_index]<- mean((y_test - nnet_test_response_temp) ^ 2)
 }
-}
+
