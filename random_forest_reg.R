@@ -10,21 +10,45 @@ library(randomForest)
 # Data prep for random forest - cannot handle large categorical variables 
 x_test$Industry <- NULL
 x_train$Industry <- NULL
-# Fit random forest with 1000 trees, test on test data 
-fit_rf2 <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 500)
 
-# Calculate in sample MSE
-(MSE_train_rf <- mean((fit_rf2$predicted - y_train) ^ 2))
-# Compared to baseline in sample MSE
-MSE_train
-# Percentage increase
-((abs(MSE_train_rf - MSE_train)) / MSE_train) * 100
+# Number of number of trees 
+numb_tree <- 10
+# Pre allocate space for random forest 
+rf_tree_mse <- data.frame(matrix(0, ncol = 3, nrow = numb_tree))
+# Rename columns -- really should not have the out error rate 
+names(rf_tree_mse)[1:3] <- c("MSE_in_sample", "Numb Trees", "MSE_out_sample") 
 
-# Out of sample MSE
-(MSE_rf <- mean((fit_rf2$test$predicted - y_test) ^ 2))
-# Compared to baseline
-MSE_test
+# Look for best number of tree parameter for random forest 
+for (tree_numb in 1:numb_tree){
+  # Number of trees to use in algorithm 
+  numb_trees_rf <- 200*tree_numb
+  # Fit random forest 
+  fit_temp <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = numb_trees_rf)
+  
+  # Calculate in sample MSE
+  MSE_in_sample <- mean((fit_temp$predicted - y_train) ^ 2)
+  # Calculate out sample MSE 
+  MSE_out_sample <- mean((fit_temp$test$predicted - y_test) ^ 2)
+  
+  # Store in data frame 
+  rf_tree_mse[tree_numb, 1:3] <- c(MSE_in_sample, numb_trees_rf, MSE_out_sample)
+  
+}
 
-# Very small gain percentage gain over regular 
-(abs(MSE_rf - MSE_test) / MSE_test) * 100
+# Look at error rate vs. Number of tree 
+plot(rf_tree_mse$`Numb Trees`, rf_tree_mse$MSE_in_sample)
+rf_err_fit <- lm( MSE_in_sample~`Numb Trees`, data = rf_tree_mse)
+abline(rf_err_fit, col = "blue", lwd= 4)
+abline(h = MSE_train, col = "red", lwd = 4)
+legend("topright",  c("Regression error fit", "MSE Training set"), col = c("blue", "red"), lwd = 4)
+
+# Find min error rate
+min_err_rate <- min(rf_tree_mse$MSE_in_sample)
+best_rf_row <- rf_tree_mse[which(rf_tree_mse$MSE_in_sample == min_err_rate), ]
+best_rf_row
+
+# Bad form 
+min_out_err <- min(rf_tree_mse$MSE_out_sample)
+# rf_tree_mse[which(rf_tree_mse$MSE_out_sample == min_out_err), ]
+
 
