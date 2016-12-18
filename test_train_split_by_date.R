@@ -86,9 +86,9 @@ rm(data, train_set1, train_set2, pre_scale_test,
    pre_scale_train, Industry_train, Industry_test,
    train_set, test_set)
 
-# Remove functions from Utilities 
-rm(lagStockData, loadLaggedDataSet, loadpackages,
-   requiredpackages, laggedDataFile, mf850_finalproject_data)
+## Remove functions from Utilities 
+#rm(lagStockData, loadLaggedDataSet, loadpackages,
+#   requiredpackages, laggedDataFile, mf850_finalproject_data)
 
 
 

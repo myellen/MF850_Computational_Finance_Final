@@ -2,11 +2,15 @@
 
 # Import the splits done previously 
 source("test_train_split_by_date.R")
+source("MF850Utilities.R")
 
 
 ###########################
 #### LASSO ANALYSIS 
 ###########################
+
+requiredpackages <- "glmnet"
+loadpackages(requiredpackages)
 
 # Prepare data for glm 
 data_train = data.frame(cbind(y_train, x_train))
@@ -24,8 +28,7 @@ MSE_train
 
 
 # Try using lasso and ridge  
-# install.packages("glmnet")
-library(glmnet)
+
 # Prepare data for glmnet package 
 x = model.matrix(y_train ~., data = data_train)
 # Specify lambdas we would like look through during ridge and lasso regressions 
@@ -90,9 +93,9 @@ glm_best_coef <- predict(glm_best, type = "coefficients",
                          s = best_row$Lambda)[1:(ncol(x)), ]
 
 # Coefficients 
-sort(glm_best_coef[abs(glm_best_coef) > 0.3])
+sort(glm_best_coef[abs(glm_best_coef) > 0.1])
 # How many is that? 
-length(glm_best_coef[abs(glm_best_coef) > 0.3])
+length(glm_best_coef[abs(glm_best_coef) > 0.1])
 
 # Now we will use this new model on the test set
 
@@ -110,3 +113,6 @@ MSE_train
 # Compare with original - Percentage decrease  
 ((MSE_train - MSE_glm_test)/MSE_train)*100
 # Decrease b
+
+## Save Trained Model
+saveRDS(glm_best, file = LinearRegrssionModelFile)

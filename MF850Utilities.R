@@ -10,6 +10,8 @@ RandomForestRegressionModelFile <- "random_forest_model.rds"
 LogisticRegressionModelFile <- "Logistic_Ridge_Lasso_model.rds"
 RandomForestCatModelFile <- "random_forest_cat_model.rds"  # Random forest high/low 
 
+par(ask=FALSE)
+
 mf850_finalproject_data <- function() {
   df <- read.csv("mf850-finalproject-data.csv")
   return(df)
@@ -35,7 +37,7 @@ loadpackages <- function(packagestoinstall) {
 
 #update.packages(ask = FALSE)
 
-requiredpackages <- "devtools, h2o"
+#requiredpackages <- "devtools, h2o"
 #loadpackages(requiredpackages)
 
 lagStockData <- function(stockdata) {
