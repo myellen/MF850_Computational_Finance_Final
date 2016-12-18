@@ -2,7 +2,22 @@
 
 # Import data
 data <- read.csv("mf850-finalproject-data.csv")
-data <- scale(data)
+#Scaling the Data
+# Need to separate categorical variables 
+data_industry <- (data$Industry)
+data_date <- (data$Date)
+
+# Remove Industry from sets before we scale 
+pre_scale_data <- within(data, rm("Industry", "Date"))
+
+# Scale the continous variable
+data <- scale(pre_scale_data)
+
+#Create data frames
+x <- as.data.frame(data)
+
+# Add industry to sets 
+x$Industry <- Industry_frame
 # Peak at data again 
 
 # Determine test and train size 
@@ -14,16 +29,16 @@ train_size <- 6772
 # Training set is next train_size after test_size 
 
 # Observatoins per month 
-summary(data$Date)
+summary(x$Date)
 # Not equal number of observations per month 
 
 # Create test set - the last month of observations 
-test_set <- data[data$Date == "2015-12-31", ]
+test_set <- x[x$Date == "2015-12-31", ]
 
 # Create train set - previous 2 months
 # First take one month 
-train_set1 <- data[data$Date == "2015-11-30", ]
-train_set2 <- data[data$Date == "2015-10-31", ]
+train_set1 <- x[x$Date == "2015-11-30", ]
+train_set2 <- x[x$Date == "2015-10-31", ]
 
 # Combine two month 
 train_set <- rbind(train_set1, train_set2)
@@ -37,12 +52,10 @@ test_data <- read.csv("Test_set.csv")
 
 # Remove Date, Company ID, Returns (response variables)
 train_data[,1] <- NULL
-train_data$Date <- NULL
 train_data$RETMONTH <- NULL
 train_data$compid <- NULL
 
 test_data[,1] <- NULL
-test_data$Date <- NULL
 test_data$RETMONTH <- NULL
 test_data$compid <- NULL
 
@@ -68,7 +81,6 @@ test_data <- cbind(x_test, y_test)
 
 # Create formula manually (bug in neural net package )
 f <- as.formula(c("y_train ~", (paste(colnames(x_train), collapse = " + "))))
-f
 
 
 # Train neural net
@@ -96,7 +108,7 @@ nnet_test_response <- compute(nnet1, x_test)$net.result
 MSE_test
 
 
-# parameter tuning - numberof hidden layers for neural network 
+# parameter tuning - number of hidden layers for neural network 
 
 # hidden layers to try from 3 - 51 by 3  
 hidden_layers <- seq(from = 3, to = 51, by= 3)
@@ -124,4 +136,4 @@ for (hl in hidden_layers){
   # Out sample MSE 
   nnet_hidden_layer_df$MSE_out[df_index]<- mean((y_test - nnet_test_response_temp) ^ 2)
 }
-}
+
