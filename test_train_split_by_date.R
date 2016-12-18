@@ -1,25 +1,29 @@
 # Test train split 
 
-# Read data 
-data <- read.csv("mf850-finalproject-data.csv")
+source("MF850Utilities.R")
+
+# Read data from source
+data <- loadLaggedDataSet()
+# Re move columns with NA 
+data <- na.omit(data)
 
 # Observatoins per month 
 summary(data$Date)
 # Not equal number of observations per month 
 
 # Create test set - the last month of observations 
-test_set <- data[data$Date == "2015-12-31", ]
+test_set <- data[data$Date == "2015-11-30", ]
 
-y_test <- test_set$RETMONTH
+y_test <- test_set$futurereturns
 
 # Create train set - previous 2 months
 # First take one month 
-train_set1 <- data[data$Date == "2015-11-30", ]
-train_set2 <- data[data$Date == "2015-10-31", ]
+train_set1 <- data[data$Date == "2015-10-31", ]
+train_set2 <- data[data$Date == "2015-09-30", ]
 
 # Combine two months for training set  
 train_set <- rbind(train_set1, train_set2)
-y_train <- train_set$RETMONTH
+y_train <- train_set$futurereturns
 
 # Remove company id - (there should only be one per month)
 test_set$compid <- NULL
@@ -33,6 +37,9 @@ train_set$RETMONTH <- NULL
 # Remove SPX - unique per month 
 test_set$RETMONTH_SPX <- NULL
 train_set$RETMONTH_SPX <- NULL
+# Remove future returns (saved in previous variable)
+test_set$futurereturns <- NULL
+train_set$futurereturns <- NULL
 
 # SCALE DATA
 # Need to separate categorical variables 
@@ -58,27 +65,30 @@ x_test$Industry <- Industry_test
 # Train set for categorical analysis 
 y_train_cat <- ifelse(y_train > 0, 1, 0)
 # Ratio of high vs low returns for TRAIN set 
-(high_low_ratio_train <- sum(y_train_cat == 1)  / length(y_train_cat))
+high_low_ratio_train <- sum(y_train_cat == 1)  / length(y_train_cat)
 
 # Test set for categorical analysis 
 y_test_cat <- ifelse(y_test > 0, 1, 0)
 # Ratio of high vs low returns for TEST set 
-(high_low_ratio_test <- sum(y_test_cat == 1) / length(y_test_cat))
+high_low_ratio_test <- sum(y_test_cat == 1) / length(y_test_cat)
 # A priori number to beat 
 
 # Baseline MSE for training set- pick the mean 
 MSE_train <- mean((y_train - mean(y_train)) ^ 2)
-MSE_test <- mean((y_test - mean(y_test)) ^ 2)
+MSE_test <- mean((y_test - mean(y_train)) ^ 2)
 
 # Test and training sets to csv 
-write.csv(test_set, file = "Test_set.csv")
-write.csv(train_set, file = "Train_set.csv")
+# write.csv(test_set, file = "Test_set.csv")
+# write.csv(train_set, file = "Train_set.csv")
 
 # Remove variables we will not need 
 rm(data, train_set1, train_set2, pre_scale_test, 
    pre_scale_train, Industry_train, Industry_test,
    train_set, test_set)
 
+# Remove functions from Utilities 
+rm(lagStockData, loadLaggedDataSet, loadpackages,
+   requiredpackages, laggedDataFile, mf850_finalproject_data)
 
 
 
