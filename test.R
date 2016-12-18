@@ -43,3 +43,6 @@ lagStockData <- function(stockdata) {
 stockdata <- read.csv("mf850-finalproject-data.csv")
 
 laggedDataSet <- lagStockData(stockdata)
+
+saveRDS(laggedDataSet, file = "laggeddata.rds")
+mynewdataframe <- readRDS(file = "laggeddata.rds")
