@@ -58,8 +58,8 @@ y_test_cat <- ifelse(y_test > 0, 1, 0)
 # A priori number to beat 
 
 # Test and training sets to csv 
-write.csv(test_set, file = "Test_set.csv")
-write.csv(train_set, file = "Train_set.csv")
+#write.csv(test_set, file = "Test_set.csv")
+#write.csv(train_set, file = "Train_set.csv")
 
 # Remove variables we will not need 
 rm(data, train_set1, train_set2, pre_scale_test, 
@@ -75,13 +75,14 @@ MSE_train <- mean( (y_train_cat - mean(y_train_cat)) ^ 2)
 MSE_test <- mean((y_test_cat - mean(y_train_cat)) ^ 2)
 
 
-########################
-### Neural Network part 
-#######################
+###########################
+### Neural Network part ###
+###########################
 
 # Install packages 
 #install.packages("neuralnet")
 library(neuralnet)
+
 
 # Format data for neuralnet command 
 train_data <- cbind(x_train, y_train)
