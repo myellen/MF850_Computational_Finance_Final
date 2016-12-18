@@ -116,3 +116,4 @@ MSE_train
 
 ## Save Trained Model
 saveRDS(glm_best, file = LinearRegrssionModelFile)
+saveRDS(best_row$Lambda, file = LinearRegrssionModelLambdaFile)
