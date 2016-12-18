@@ -20,7 +20,11 @@ install:
   - echo '.travis.yml' > .Rbuildignore
 script:
 #  - ./RunScript.sh test.R
-#  - ./RunScript.sh data_exploration-12-5.R
+  - ./RunScript.sh data_exploration-12-5.R
   - ./RunScript.sh cm_v1.R
 #  - ./RunScript.sh GPUAcceleratedClustering.R
 #  - ./RunScript.sh NeuralNet.R
+  - ./RunScript.sh test_train_split.R
+  - ./RunScript.sh random_forest_cat.R
+  - ./RunScript.sh random_forest_reg.R
+  - ./RunScript.sh lda_cat1.R
