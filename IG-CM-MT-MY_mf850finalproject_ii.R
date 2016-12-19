@@ -28,24 +28,30 @@ df$Date <- NULL
 df$compid <- NULL
 df$RETMONTH_SPX <- NULL
 
+# Reformat data for glmnet 
 x_data <- model.matrix(~., data = df)
-
+# Import model from file 
 glm_best <- readRDS(LinearRegrssionModelFile)
 bestLambda <- readRDS(LinearRegrssionModelLambdaFile)
 
-predict_glm <- predict(glm_best, newx = x_data, 
+# Scale data - remove categorical variable and add it back 
+Industry <- df$Industry
+df <- within(df, rm("Industry"))
+df <- scale(df)
+df$Industry <- Industry
+
+# Predict using optimal glmnet 
+predict_glm <- predict.glmnet(glm_best, newx = x_train2, 
                        type = "response", s = bestLambda)
 
-predict_glm
+head(predict_glm)
 
 originalData <- loadLaggedDataSet()
-#originalLag <- lagStockData(originalData)
-#originalLag <- na.omit(originalLag)
+originalLag <- lagStockData(originalData)
+originalLag <- na.omit(originalLag)
 y_test <- originalLag$futurereturns
-# Calculate test MSE 
-(MSE_glm_test <- mean((predict_glm - y_test)^2))
-MSE_train
-# Compare with original - Percentage decrease  
-((MSE_train - MSE_glm_test)/MSE_train)*100
 
+# Calculate test MSE 
+(MSE_glm_test <- mean((predict_glm - y_train)^2))
+# Compare with original - Percentage decrease  
 
