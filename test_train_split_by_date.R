@@ -100,6 +100,6 @@ train_set_results <- train_set5$futurereturns
 train_set5$RETMONTH <- NULL
 train_set5$futurereturns <- NULL 
 # Write results to file 
-write.csv(train_set5, file = "TestDF_no_returns.csv")
-write.csv(train_set_results, file = "TestDF_returns.csv")
+#write.csv(train_set5, file = "TestDF_no_returns.csv")
+#write.csv(train_set_results, file = "TestDF_returns.csv")
 
