@@ -15,14 +15,22 @@ r_github_packages:
   - jimhester/lintr
 before_install:
   - chmod a+x ./RunScript.sh
-  - chmod a+x ./LintrScript.sh
 install:
   - echo 'options(repos = "http://cran.rstudio.com")' > .Rprofile
   - echo '.travis.yml' > .Rbuildignore
 script:
-  - ./LintrScript.sh
-  - ./RunScript.sh test.R
-  - ./RunScript.sh data_exploration-12-5.R
-  - ./RunScript.sh cm_v1.R
-  - ./RunScript.sh GPUAcceleratedClustering.R
-  - ./RunScript.sh NeuralNet.R
+#  - ./RunScript.sh test.R
+#  - ./RunScript.sh data_exploration-12-5.R
+#  - ./RunScript.sh cm_v1.R
+#  - ./RunScript.sh GPUAcceleratedClustering.R
+#  - ./RunScript.sh NeuralNet.R
+  - ./RunScript.sh test_train_split_by_date.R
+#  - ./RunScript.sh random_forest_cat.R
+#  - ./RunScript.sh random_forest_reg.R
+#  - ./RunScript.sh lda_cat1.R
+#  - ./RunScript.sh Logistic_Ridge_Lasso.R
+#  - ./RunScript.sh Linear_Ridge_Lasso.R
+  - ./RunScript.sh MF850Utilities.R
+#  - ./RunScript.sh NeuralNet_tryM.R
+  - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_ii.R
+  - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_iii.R
