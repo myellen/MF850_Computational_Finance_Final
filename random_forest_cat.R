@@ -60,5 +60,5 @@ min_out_err <- min(rf_tree_err$Out_Error_Rate)
 
 fit_cat <- randomForest(x_train, as.factor(y_train_cat), xtest = x_test, ytest = as.factor(y_test_cat), keep.forest = T, ntree = 1400)
 
-saveRDS(fit_cat, file = RandomForestCatFile)
+saveRDS(fit_cat, file = RandomForestCatModelFile)
 # saveRDS(best_row$Lambda, file = LinearRegrssionModelLambdaFile)
