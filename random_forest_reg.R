@@ -1,5 +1,5 @@
 
-
+source("MF850Utilities.R")
 source("test_train_split_by_date.R")
 ############################################
 ## Start Random Forest Stuff
@@ -61,3 +61,9 @@ pred_high_low <- ifelse(predictions < 0, 0, 1)
 # Compare with y train cat - categorical variables 
 error_rate <- mean(pred_high_low != y_test_cat)
 error_rate
+
+
+# Fit the best tree keeping the forest for prediction 
+fit_best_rf <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 700, keep.forest = TRUE)
+# Save RDS file 
+saveRDS(fit_best_rf, RandomForestRegressionModelFile)
