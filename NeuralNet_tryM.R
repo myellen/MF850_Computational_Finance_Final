@@ -58,8 +58,7 @@ h2o.performance(m2)
 h2o.saveModel(m2,model_id_cat)
 plot(m2)
 
-h2o.shutdown()
-y
+h2o.shutdown(prompt = FALSE)
 
 #https://github.com/h2oai/h2o-3/blob/master/h2o-docs/src/product/tutorials/dl/dlperf.Rmd
 # https://www.analyticsvidhya.com/blog/2016/05/h2o-data-table-build-models-large-data-sets/

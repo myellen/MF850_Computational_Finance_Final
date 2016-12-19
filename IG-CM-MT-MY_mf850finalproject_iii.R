@@ -90,23 +90,36 @@ categoricalStockPredictions <- function(df) {
   # Predict using Random Forest 
   predict_rf <- predict(rf_cat_model, newdata = x_data_rf)
   
- 
+  ##################
+  ## Deep Learning
+  ##################
+  
+  h2o.init(nthreads = -1)
+  
+  x_data_h2o.hex <- as.h2o(x_data_lin)
+  dnnModel <- h2o.loadModel("DNNmodel_cat/DNNmodel_cat")
+  predict.reg <- as.data.frame(h2o.predict(dnnModel, x_data_h2o.hex))
+  
+  h2o.shutdown(prompt = FALSE)
+  
+  
   #################
   ## Predictions 
   #####################
   
   # Calculate Weights
   # Order is DNN, RF, GLM 
-  Accuracy <- c(0, 0.356  ,0.6317)
+  Accuracy <- c(.8, 0.356  ,0.6317)
   weights <- (Accuracy)/sum(Accuracy)
   
   # Turn predictions from factors into integers for combining at the end  
   #predict.reg <- as.integer(predict.reg)
   predict_rf <- as.integer(predict_rf)
   predict_glm <- as.integer(predict_glm)
+  predict_dnn <- as.integer(predict.reg$predict)
   
   # Weight predictions
-  #predictions <- (weights[1]*predict.reg$predict + weights[2]*predict_rf + weights[3]*predict_glm)
+  predictions <- (weights[1]*predict_dnn + weights[2]*predict_rf + weights[3]*predict_glm)
   
   # Make predictions 0 or 1 
   predictions <- ifelse(predictions > 0, 1, 0 )
