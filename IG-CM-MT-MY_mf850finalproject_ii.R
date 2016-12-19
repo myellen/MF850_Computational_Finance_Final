@@ -85,8 +85,8 @@ regressionStockPredictions <- function(df) {
   NROW(y_test)
   
   h2o.shutdown(prompt = FALSE)
-  weights <- cbind(1,1,1)
-  predictions <- (weights[1]*predict.reg$predict + weights[2]*predict_rf + weights[3]*predict_glm) / sum(weights)
+  weights <- cbind(0.28,0.31,0.41)
+  predictions <- (weights[1]*predict.reg$predict + weights[2]*predict_rf + weights[3]*predict_glm) 
   return(predictions)
 }
 
