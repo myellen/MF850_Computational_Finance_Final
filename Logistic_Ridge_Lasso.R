@@ -2,6 +2,7 @@
 
 # Import the splits done previously 
 source("test_train_split_by_date.R")
+source("MF850Utilities.R")
 
 
 ###########################
@@ -105,3 +106,8 @@ predict_glm <- predict(glm_best, newx = x_train_edit,
 predict_01 <- ifelse(predict_glm > 0.5, 1, 0)
 # accuracy is where predictions != test set
 (accuracy <-  mean(predict_01 == y_test_cat))
+
+
+## Save Model as RDS 
+saveRDS(glm_best, file = LogisticRegressionModelFile)
+saveRDS(best_row$Lambda, file = LogisticRegressionModelLambdaFile)

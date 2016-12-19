@@ -4,6 +4,8 @@ LinearRegrssionFile <- "Linear_Ridge_Lasso.R"
 RandomForestRegressionFile <- "random_forest_reg.R"
 LogisticRegressionFile <- "Logistic_Ridge_Lasso.R"
 RandomForestCatFile <- "random_forest_cat.R"  # Random forest high/low
+LogisticRegressionModelLambdaFile <- "Logistic_Ridge_Lasso_model_lambda.rds"
+
 
 LinearRegrssionModelFile <- "Linear_Ridge_Lasso_model.rds"
 LinearRegrssionModelLambdaFile <- "Linear_Ridge_Lasso_model_lambda.rds"

@@ -39,12 +39,12 @@ originalLag <- loadLaggedDataSet()
 y_test <- originalLag$futurereturns
 
 ###################
-### GLMNET 
+### GLMNET - LOGISITIC 
 #################
 
 # Import glmnet model and parameter from file 
-glm_best <- readRDS(LinearRegrssionModelFile)
-bestLambda <- readRDS(LinearRegrssionModelLambdaFile)
+glm_best <- readRDS(LogisticRegressionModelFile)
+bestLambda <- readRDS(LogisticRegressionModelLambdaFile)
 
 # Reformat data for glmnet 
 x_data_lin <- model.matrix(~., data = df)
@@ -54,12 +54,13 @@ predict_glm <- predict.glmnet(glm_best, newx = x_data, type = "response", s = be
 # Calculate Glm Model MSE 
 (MSE_glm <- mean((predict_glm - y_train)^2))
 
+
 ##################
 ## Random Forest 
 ##################
 
 # Import random forest model from file - has 1400 trees 
-rf_reg_model <- readRDS(RandomForestCatFile)
+rf_cat_model <- readRDS(RandomForestCatFile)
 
 # Reformat data for random forest
 x_data_rf <- within(df, rm("Industry"))
@@ -69,6 +70,4 @@ predict_rf <- predict(rf_cat_mode, newdata = x_data_rf)
 
 # Calculate Random Forest MSE 
 (MSE_rf <- mean((predict_rf - y_train)^2))
-
-
 

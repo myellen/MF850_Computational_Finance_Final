@@ -54,7 +54,6 @@ min_out_err <- min(rf_tree_mse$MSE_out_sample)
 
 # Use regression results for categorical analysis 
 fit_temp <- randomForest(x_train, y_train, xtest = x_test, ytest = y_test, ntree = 700)
-
 # Save predictions from best random forest 
 predictions <- fit_temp$test$predicted
 # Turn regression results into categorical - high/low predictions 
