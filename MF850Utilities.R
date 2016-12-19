@@ -39,14 +39,8 @@ loadpackages <- function(packagestoinstall) {
   }
 }
 
-#update.packages(ask = FALSE)
-
-#requiredpackages <- "devtools, h2o"
-#loadpackages(requiredpackages)
-
 lagStockData <- function(stockdata) {
   companies <- split(stockdata, factor(stockdata$compid))
-#  companylist <- vector("list", NROW(companies))
   newdataset <- data.frame()
   i <- 0
   for(company in companies)
@@ -58,13 +52,24 @@ lagStockData <- function(stockdata) {
     company$futurereturns <- futurereturns
     newdataset = rbind(newdataset, company)
     i <- i + 1
-#    companylist[[i]] <- company
     if(i %% 500 == 0) print(i)
   }
-#  companymatrix <- rbind(companylist)
-#  return(companymatrix)
-#  newdataset <- as.data.frame(as.table(companymatrix))
   saveRDS(newdataset, file = laggedDataFile)
+  return(newdataset)
+}
+
+removeLastMonth <- function(stockdata) {
+  companies <- split(stockdata, factor(stockdata$compid))
+  newdataset <- data.frame()
+  i <- 0
+  for(company in companies)
+  {
+    company = company[-1,]
+    
+    newdataset = rbind(newdataset, company)
+    i <- i + 1
+    if(i %% 500 == 0) print(i)
+  }
   return(newdataset)
 }
 
