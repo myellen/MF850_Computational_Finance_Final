@@ -15,11 +15,12 @@ x_testh2o.hex <- as.h2o(x_test)
 
 
 h2o.deeplearning( x = explanatorycolumns, y = "futurereturns", training_frame =  x_trainh2o.hex,
-                  validation_frame = x_testh2o.hex, activation =  "Rectifier", hidden = rep(100, 100),
+                  validation_frame = x_testh2o.hex, activation =  "Tanh", hidden = rep(100, 100),
                   #momentum_start = 0.5, momentum_stable = 0.99, 
                   loss = "Automatic",
                   distribution = "AUTO", nfolds = 2,
-                  model_id = model_id)
+                  model_id = model_id,
+                  initial_weight_distribution = "Uniform")
 
 m <- h2o.getModel(model_id)
 summary(m)
