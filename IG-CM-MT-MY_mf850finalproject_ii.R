@@ -17,6 +17,8 @@ removeLastMonth <- function(stockdata) {
 
 # deliverables go here
 source("MF850Utilities.R") # use this for now
+requiredpackages <- "h2o"
+loadpackages(requiredpackages)
 
 # assume csv like mf850-finalproject-data.csv with RETMONTH removed
 df <- read.csv("mf850-finalproject-data-NORETMONTH.csv")
@@ -70,5 +72,20 @@ predict_rf <- predict(rf_cat_mode, newdata = x_data_rf)
 # Calculate Random Forest MSE 
 (MSE_rf <- mean((predict_rf - y_train)^2))
 
+##################
+## Deep Learning
+##################
 
+h2o.init(nthreads = -1)
 
+x_data_h2o.hex <- as.h2o(x_data_lin)
+dnnModel <- h2o.loadModel("DNNmodel/DNNmodel")
+predict.reg <- as.data.frame(h2o.predict(dnnModel, x_data_h2o.hex))
+
+(MSE_dnn <- mean((predict.reg$predict - y_test)^2))
+
+NROW(predict.reg)
+NROW(y_test)
+
+h2o.shutdown()
+y

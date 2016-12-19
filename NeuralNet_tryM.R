@@ -11,15 +11,25 @@ x_train$futurereturns <- y_train
 x_test$futurereturns <- y_test
 
 x_trainh2o.hex <- as.h2o(x_train)
-x_testh20.hex <- as.h2o(x_test)
+x_testh2o.hex <- as.h2o(x_test)
+
 
 h2o.deeplearning( x = explanatorycolumns, y = "futurereturns", training_frame =  x_trainh2o.hex,
-                  validation_frame = x_testh20.hex, activation =  "Rectifier", hidden = rep(100, 100),
+                  validation_frame = x_testh2o.hex, activation =  "Rectifier", hidden = rep(100, 100),
                   #momentum_start = 0.5, momentum_stable = 0.99, 
                   loss = "Automatic",
-                  distribution = "AUTO", nfolds = 4)
+                  distribution = "AUTO", nfolds = 2,
+                  model_id = model_id)
 
-colnames(x_test)
+m <- h2o.getModel(model_id)
+summary(m)
+h2o.performance(m)
+h2o.saveModel(m,model_id)
+plot(m)
 
 h2o.shutdown()
 y
+
+#https://github.com/h2oai/h2o-3/blob/master/h2o-docs/src/product/tutorials/dl/dlperf.Rmd
+# https://www.analyticsvidhya.com/blog/2016/05/h2o-data-table-build-models-large-data-sets/
+

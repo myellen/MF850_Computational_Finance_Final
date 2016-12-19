@@ -31,4 +31,5 @@ script:
   - ./RunScript.sh Logistic_Ridge_Lasso.R
   - ./RunScript.sh Linear_Ridge_Lasso.R
   - ./RunScript.sh MF850Utilities.R
+  - ./RunScript.sh NeuralNet_tryM.R
   - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_ii.R

@@ -1,4 +1,5 @@
 laggedDataFile <- "laggeddata.rds"
+model_id <- "DNNmodel"
 
 LinearRegrssionFile <- "Linear_Ridge_Lasso.R"
 RandomForestRegressionFile <- "random_forest_reg.R"
