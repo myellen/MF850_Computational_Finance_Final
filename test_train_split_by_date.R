@@ -82,13 +82,24 @@ MSE_test <- mean((y_test - mean(y_train)) ^ 2)
 # write.csv(train_set, file = "Train_set.csv")
 
 # Remove variables we will not need 
-rm(data, train_set1, train_set2, pre_scale_test, 
-   pre_scale_train, Industry_train, Industry_test,
-   train_set, test_set)
+# rm(data, train_set1, train_set2, pre_scale_test, 
+#    pre_scale_train, Industry_train, Industry_test,
+#    train_set, test_set)
 
 ## Remove functions from Utilities 
 #rm(lagStockData, loadLaggedDataSet, loadpackages,
 #   requiredpackages, laggedDataFile, mf850_finalproject_data)
 
 
+# Practice set (without returns )
+train_set3 <- data[data$Date == "2015-02-28", ]
+train_set4 <- data[data$Date == "2015-01-31", ]
+train_set5 <- rbind(train_set3, train_set4)
+train_set_results <- train_set5$futurereturns
+# Remove variables 
+train_set5$RETMONTH <- NULL
+train_set5$futurereturns <- NULL 
+# Write results to file 
+write.csv(train_set5, file = "TestDF_no_returns.csv")
+write.csv(train_set_results, file = "TestDF_returns.csv")
 
