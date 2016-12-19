@@ -33,4 +33,4 @@ script:
   - ./RunScript.sh MF850Utilities.R
   - ./RunScript.sh NeuralNet_tryM.R
   - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_ii.R
-  - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_iii
+  - ./RunScript.sh IG-CM-MT-MY_mf850finalproject_iii.R
